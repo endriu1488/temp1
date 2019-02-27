@@ -1,0 +1,427 @@
+Laborator de Algoritmi Fundamentali si Structuri de Date
+°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+°°°°°°°°°°°°°°°°°°                            °°°°°°°°°°°°°°°°°°
+°°°°°°°°°°°°°°°°°°     Lucrarea nr. 2         ²²°°°°°°°°°°°°°°°°
+°°°°°°°°°°°°°°°°°°                            ²²°°°°°°°°°°°°°°°°
+°°°°°°°°°°°°°°°°°°       Liste Inlantuite     ²²°°°°°°°°°°°°°°°°
+°°°°°°°°°°°°°°°°°°                            ²²°°°°°°°°°°°°°°°°
+°°°°°°°°°°°°°°°°°°°°²²²²²²²²²²²²²²²²²²²²²²²²²²²²°°°°°°°°°°°°°°°°
+°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+ÛßßßßßßßßßßßßßÛ
+Û Introducere Û 
+ÛÜÜÜÜÜÜÜÜÜÜÜÜÜÛ 
+      O lista este o colectie de elemente intre care este specificata o
+anumita ordine. Pentru o lista inlantuita ordinea elementelor este specificata
+explicit printr-un cimp de informatie care face parte din fiecare element,
+specificind elementul urmator.
+
+Deci fiecare element de lista inlantuita are urmatoarea structura:
+
+             Informatie utila    Informatie de inlantuire
+           ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄ¿
+           ³                   ³           ³
+           ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÁÄÄÄÄÄÄÄÄÄÄÄÙ
+                    data             link 
+
+Pe baza informatiei de inlantuire (pastrata in cimpul link) trebuie sa poata
+fi identificat urmatorul element din lista.
+ÛßßßßßßßßßßßßßßßßßßßßßßßßßßÛ
+Û Lista inlantuita statica Û
+ÛÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÛ
+      Consideram urmatoarele declaratii:
+
+     struct Element {
+                char* data;
+                int link;
+                };
+
+     Element V[8];
+
+Pentru elementele vectorului V exista o ordine naturala data de aranjarea in
+memorie a elemetelor sale: V[0], V[1], ... V[7].   Vom reperezenta memoria
+ocupata de vectorul V astfel incit fiecare element sa fie reprezentat
+vertical, in felul urmator:             
+       0  1  2  3  4  5  6  7
+     ÚÄÄÂÄÄÂÄÄÂÄÄÂÄÄÂÄÄÂÄÄÂÄÄ¿ 
+data ³  ³  ³  ³  ³  ³  ³  ³  ³
+     ³  ³  ³  ³  ³  ³  ³  ³  ³ 
+     ÃÄÄÅÄÄÅÄÄÅÄÄÅÄÄÅÄÄÅÄÄÅÄÄ´ 
+link ³  ³  ³  ³  ³  ³  ³  ³  ³
+     ÀÄÄÁÄÄÁÄÄÁÄÄÁÄÄÁÄÄÁÄÄÁÄÄÙ
+                
+Completind cimpul link pentru fiecare element al vectorului putem obtine o
+lista inlantuita. Valoarea cimpului link va fi index in vector al urmatorului
+element din lista.
+
+Vectorul V:
+  V[0]  V[1]  V[2]  V[3]  V[4]  V[5]  V[6]  V[7]
+ÉÍÍÍÍÍËÍÍÍÍÍËÍÍÍÍÍËÍÍÍÍÍËÍÍÍÍÍËÍÍÍÍÍËÍÍÍÍÍËÍÍÍÍÍ»
+º     º     º     º     º     º     º     º     º
+º     º     º     º     º     º     º     º     º
+º     º     º     º     º     º     º     º     º
+º     º     º     º     º     º     º     º     º
+ÌÍÍÍÍÍÎÍÍÍÍÍÎÍÍÍÍÍÎÍÍÍÍÍÎÍÍÍÍÍÎÍÍÍÍÍÎÍÍÍÍÍÎÍÍÍÍÍ¹
+ºÚÄÄÄ¿ºÚÄÄÄ¿ºÚÄÄÄ¿ºÚÄÄÄ¿ºÚÄÄÄ¿º     ºÚÄÄÄ¿ºÚÄÄÄ¿º
+º³ 1 ³º³ 2 ³º³ 4 ³º³ 6 ³º³ 5 ³º -1  º³ 7 ³º³ 0 ³º
+ºÀÄÂÄÙºÀÄÂÄÙºÀÄÂÄÙºÀÄÂÄÙºÀÄÂÄÙº     ºÀÄÂÄÙºÀÄÂÄÙº
+ÈÑÍØÍÍÊÑÍØÍÍÊÑÍØÍÍÊÍÍØÍÍÊÑÍØÍÍÊÑÍÍÍÍÊÑÍØÍÍÊÑÍØÍÍ¼
+ ³ ÀÄ¯ÄÙ ÀÄ¯ÄÙ ³     ³   ³ ÀÄ¯ÄÙ     ³ ÀÄ¯ÄÙ ³ 
+ ³             ³     ÀÄ¯ÄÅÄÄÄÄ¯ÄÄÄÄÄÄÙ       ³ 
+ ³             ÀÄÄÄÄ¯ÄÄÄÄÙ                   ³ 
+ ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ®ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
+
+Pe baza inlantuirii stabilita de valorile din figura de mai sus se obtine
+ordinea: V[3], V[6], V[7], V[0], V[1], V[2], V[4], V[5].
+
+Este necesar sa cunoastem care este primul element din inlantuire, pentru
+aceasta retinem intr-o variabila:
+
+      int cap;
+
+indexul primului element
+
+      cap=3.
+
+Parcurgerea in ordine a elemntelor listei se face in felul urmator:
+
+      int crt;
+      .................
+      crt = cap;
+      while (crt!=-1) {
+                     ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                     ³ Prelucreaza V[crt] ³
+                     ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+                     crt = V[crt].link;
+                     }
+
+Indiferent de modul cum se materializeaza informatiile de legatura pentru a
+reprezenta o lista inlantuita vom folosi urmatoarea reprezentare:
+ 
+           data      link              data     link
+         ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍ»         ÉÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍ»     
+         º          ³  ş  º         º          ³     º     
+         ÈÍÍÍÍÍÍÍÍÍÍÏÍÍØÍÍ¼    ÚÄÄÄ>ÈÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍ¼     
+                       ÀÄÄÄÄÄÄÄÙ
+Sageata care porneste din cimpul link arata faptul valoarea memorata aici
+indica elementul la care duce sageata.
+
+ÛßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßÛ
+Û Structuri autoreferite in C si C++ Û
+ÛÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÛ
+
+      Pentru rolul pe care il joaca informatiile de legatura in structurile
+inlantuite, cel mai potrivit este tipul pointer (referinta). Tipul cimpului
+link va fi "pointer la element de lista". Iata cum arata declaratiile tipului
+"element de lista" in C++:
+
+      struct Element {
+             TipOarecare data;          // informatia utila
+             Element* link;             // legatura
+             };
+
+In C va trebui sa scriem:
+
+      typedef struct _Element {
+           TipOarecare data;
+           struct _Element* link;
+           } Element;
+
+Avind declaratiile de mai sus (una din forme), si
+
+      Element* p;              // un pointer la Element
+
+in urma unei operatii:
+
+      p = (Element*) malloc( sizeof(Element) );    // in C
+
+sau, simplu
+
+      p = new Element;                             // in C++
+
+p a fost initializat cu adresa unei variabile de tip Element alocata in zona
+de alocare dinamica:             
+
+                          *p  
+                 ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+                     data      link
+       p         ÉÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍ»
+     ÉÍÍÍÍ»      º           ³       º
+     º  şÄ×ÄÄÄÄÄ>ÈÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍ¼
+     ÈÍÍÍÍ¼        p->data     p->link
+           
+Atunci, aceasta din urma va fi identificata prin expresia *p iar cimpurile
+sale prin expresiile  p->data  si respectiv  p->link  .
+      Constanta 0 (NULL) pentru un pointer inseamna o adresa imposibila.
+Aceasta valoare va fi folosita pentru a sfirsi inlantuirea (ultimul element
+din lista va avea p->link==0).
+      Pentru a manevra o lista avem nevoie doar de un pointer la primul
+element al listei. Pentru a indica o lista vida acest pointer va primi
+valoarea 0. 
+
+ÛßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßÛ
+Û Operatii in liste inlantuite Û
+ÛÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÛ
+
+      Consideram declaratiile de tipuri de mai sus si variabilele:
+
+      Element* cap;     // pointer la primul element al unei liste
+      Element* p;
+      Element* q;
+
+Operatiile primitive pentru acces la o lista inlantuita sint:
+
+ÛßßßÛßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßÛ
+Û 1 Û  Inserarea unui element in lista Û
+ÛÜÜÜÛÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÛ
+Consideram: cap - contine adresa primului element din lista;
+            p   - contine adresa unui element izolat care dorim 
+                  sa fie inserat in lista.
+
+[A] Inserarea in fata
+ßßßßßßßßßßßßßßßßßßßßßß
+Situatia initiala:
+  cap                          
+  ÉÍÍÍ»        ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ» 
+  º şÄ×ÄÄÄÄÄÄÄ>º      ³ şÄ×ÄÄ>º      ³ şÄ×ÄÄ>º      ³ 0 º
+  ÈÍÍÍ¼        ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼ 
+  p        ÉÍÍÍÍÍÍÑÍÍÍ»  
+  ÉÍÍÍ»    º      ³   º  
+  º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼  
+  ÈÍÍÍ¼                  
+
+Situatia finala:
+   cap  
+  ÉÍÍÍ»        ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»
+  º ş º     ÚÄ>º      ³ şÄ×ÄÄ>º      ³ şÄ×ÄÄ>º      ³ 0 º
+  ÈÍØÍ¼     ³  ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼
+    ³       ÀÄÄÄÄÄÄÄ¿
+    ³2              ³1
+  p ÀÄÄÄ¿  ÉÍÍÍÍÍÍÑÍØÍ»  
+  ÉÍÍÍ» ÀÄ>º      ³ ş º   
+  º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼
+  ÈÍÍÍ¼    
+
+Fiecare sageata nou creeata insemna o atribuire: se atribuie varibilei in 
+care sageata nou creata isi are originea, valoarea luata dintr-o variabila in
+care se afla originea unei sageti cu aceeasi destinatie.
+
+In cazul nostru avem atribuirile (fiecare atribuire corespunde sagetii cu 
+acelasi numar din figura):
+      (1)     p->link = cap;
+      (2)     cap = p;
+
+Sa detaliem: Prima atribuire 
+
+              p->link = cap;
+
+leaga elementul de inserat de restul listei. In urma acestei atribuiri, cap
+si p->link vor indica ambii inceputul listei initiale (vezi figura de mai
+jos).
+   cap                          
+  ÉÍÍÍ»        ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ» 
+  ºÛÛÛ×ÄÄÄÄÄÄÄ>º      ³ şÄ×ÄÄ>º      ³ şÄ×ÄÄ>º      ³ 0 º
+  ÈÍÍÍ¼     ÉÍ>ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼ 
+           1º
+            ÈÍÍÍÍÍÍÍ»      
+  p        ÉÍÍÍÍÍÍÑÍºÍ»    
+  ÉÍÍÍ»    º      ³ÛÛÛº  
+  º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼  
+  ÈÍÍÍ¼            p->link      
+
+A doua atribuire:    
+             
+               cap = p;    
+
+pune in pointerul cap adresa elementului inserat in fata listei.
+
+   cap                          
+  ÉÍÍÍ»        ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ» 
+  ºÛÛÛº        º      ³ şÄ×ÄÄ>º      ³ şÄ×ÄÄ>º      ³ 0 º
+  ÈÍºÍ¼     ÚÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼ 
+    ÈÍÍÍ»   ÀÄÄÄÄÄÄÄ¿      
+    p  2º  ÉÍÍÍÍÍÍÑÍ³Í»    
+  ÉÍÍÍ» ÈÍ>º      ³ ş º  
+  ºÛÛÛ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼  
+  ÈÍÍÍ¼                  
+Observatie:
+      Daca pointerul cap este initial nul, (ceea ce inseamna inserarea intr-o
+      lista vida) atribuirile de mai sus functioneaza corect rezultind o
+      lista cu un singur element.
+
+           p->link = cap;    // de fapt    p->link = 0;
+           cap = p;
+    ÉÍÍÍ»                           ÉÍÍÍ» 
+    º 0 º                        capº şÄ×Ä¿
+    ÈÍÍÍ¼    ÉÍÍÍÍÍÍÑÍÍÍ»           ÈÍÍÍ¼ ³  ÉÍÍÍÍÍÍÑÍÍÍ»    
+    ÉÍÍÍ»    º      ³   º           ÉÍÍÍ» ÀÄ>º      ³ 0 º  
+    º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼         p º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼  
+    ÈÍÍÍ¼                           ÈÍÍÍ¼            p->link
+
+[B] Inserarea la mijloc sau la sfirsit
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß 
+      Varibila q va indica elementul dupa care se face inserarea.
+Situatia initiala:
+                  
+  cap      ÉÍÍÍÍÍÍÑÍÍÍ»      ÉÍÍÍÍÍÍÑÍÍÍ»       ÉÍÍÍÍÍÍÑÍÍÍ»
+  ÉÍÍÍ»    º      ³ şÄ×ÄÄÄÄÄ>º      ³ şÄ×ÄÄÄÄÄÄ>º      ³ 0 º
+  º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼   ÚÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼       ÈÍÍÍÍÍÍÏÍÍÍ¼
+  ÈÍÍÍ¼             ÉÍÍÍ» ³ 
+                   qº şÄ×ÄÙ           ÉÍÍÍÍÍÍÑÍÍÍ»
+                    ÈÍÍÍ¼    ÉÍÍÍ»    º      ³   º
+                            pº şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼
+                             ÈÍÍÍ¼
+
+Situatia finala:                    q->link
+  cap      ÉÍÍÍÍÍÍÑÍÍÍ»      ÉÍÍÍÍÍÍÑÍÍÍ»       ÉÍÍÍÍÍÍÑÍÍÍ»
+  ÉÍÍÍ»    º      ³ şÄ×ÄÄÄÄÄ>º      ³ ş º    ÚÄ>º      ³ 0 º
+  º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼   ÚÄ>ÈÍÍÍÍÍÍÏÍØÍ¼    ³  ÈÍÍÍÍÍÍÏÍÍÍ¼
+  ÈÍÍÍ¼             ÉÍÍÍ» ³        ÚÄÄÙ      ÀÄÄÄÄÄ¿
+                   qº şÄ×ÄÙ        ³  ÉÍÍÍÍÍÍÑÍÍÍ» ³
+                    ÈÍÍÍ¼    ÉÍÍÍ» ÀÄ>º      ³ şÄ×ÄÙ
+                            pº şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼
+                             ÈÍÍÍ¼           p->link
+                  
+      (1)     p->link = q->link;
+      (2)     q->link = p;
+
+Observatii:
+      Atunci cind q indica ultimul element dintr-o lista, atribuirile de mai
+      sus functioneaza corect si adauga elementul indicat de p la sfirsitul
+      listei. 
+
+Nu se poate face inserarea in fata unui element dat (prin q) fara a parcurge
+lista de la capat.
+
+ÛßßßÛßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßÛ
+Û 2 Û Stergerea unui element din lista Û
+ÛÜÜÜÛÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÛ
+
+Consideram: cap - contine adresa primului element din lista.
+
+[A] Stergerea din fata
+ßßßßßßßßßßßßßßßßßßßßßßß
+Prin operatia de stergere se intelege scoaterea unui element din inlantuire.
+Elementul care a fost izolat de lista trebuie sa fie procesat in continuare,
+cel putin pentru a fi eliberata zona de memorie pe care o ocupa, de aceea
+adresa lui trebuie salvata (sa zicem in variabila pointer p). 
+
+Situatia initiala:
+                  
+  cap      ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»
+  ÉÍÍÍ»    º      ³ şÄ×ÄÄ>º      ³ şÄ×ÄÄ>º      ³ 0 º
+  º şÄ×ÄÄÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼
+  ÈÍÍÍ¼          
+          
+Situatia finala:
+    p     
+  ÉÍÍÍ»   
+  º şÄ×Ä¿1 
+  ÈÍÍÍ¼ ³         
+  cap   ³  ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»   ÉÍÍÍÍÍÍÑÍÍÍ»
+  ÉÍÍÍ» ÀÄ>º      ³ şÄ×ÄÄ>º      ³ şÄ×ÄÄ>º      ³ 0 º
+  º ş º    ÈÍÍÍÍÍÍÏÍÍÍ¼ÚÄ>ÈÍÍÍÍÍÍÏÍÍÍ¼   ÈÍÍÍÍÍÍÏÍÍÍ¼
+  ÈÍØÍ¼                ³ 
+    ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ2
+          
+      (1)     p = cap;
+      (2)     cap = cap->link;
+              delete p ;        // Elibereaza zona de memorie 
+
+[B] Stergerea din mijloc sau de la sfirsit
+ßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßßß  
+      Varibila q va indica elementul din fata celui care va fi sters.
+
+Situatia initiala:
+                  
+   ÍÍÑÍÍÍ»      ÉÍÍÍÍÍÍÑÍÍÍ»       ÉÍÍÍÍÍÍÑÍÍÍ»       ÉÍÍÍş  
+     ³ şÄ×ÄÄÄÄÄ>º      ³ şÄ×ÄÄÄÄÄÄ>º      ³ şÄ×ÄÄÄÄÄÄ>º 
+   ÍÍÏÍÍÍ¼    Ú>ÈÍÍÍÍÍÍÏÍÍÍ¼       ÈÍÍÍÍÍÍÏÍÍÍ¼       ÈÍÍÍş 
+        ÉÍÍÍ» ³                                      
+       qº şÄ×ÄÙ            
+        ÈÍÍÍ¼ 
+                                p  
+Situatia finala:              ÉÍÍÍ» 
+                              º ş º 
+                              ÈÍØÍ¼ 
+   ÍÍÑÍÍÍ»      ÉÍÍÍÍÍÍÑÍÍÍ»    ³  ÉÍÍÍÍÍÍÑÍÍÍ»       ÉÍÍÍş  
+     ³ şÄ×ÄÄÄÄÄ>º      ³ ş º    ÀÄ>º      ³ şÄ×ÄÄÄÄÄÄ>º 
+   ÍÍÏÍÍÍ¼    Ú>ÈÍÍÍÍÍÍÏÍØÍ¼       ÈÍÍÍÍÍÍÏÍÍÍ¼    ÚÄ>ÈÍÍÍş 
+        ÉÍÍÍ» ³          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ 
+       qº şÄ×ÄÙ            
+        ÈÍÍÍ¼ 
+      (1)     p = q->link;
+      (2)     q->link = p->link;  // sau q->link = q->link->link;
+              delete p;   
+
+Observatii:
+      Atunci cind q indica penultimul element dintr-o lista, atribuirile de
+      mai sus functioneaza corect si sterg ultimul element din lista.
+
+Nu se poate face steergerea elementului indicat de q fara parcurgerea listei
+de la capat.
+
+ÛßßßÛßßßßßßßßßßßßßßßßßßßßÛ
+Û 3 Û Parcurgerea listei Û
+ÛÜÜÜÛÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÛ
+
+Consideram: cap - contine adresa primului element din lista.
+
+O parcurgere inseamna prelucrarea pe rind a tuturor elementelor listei, in 
+ordinea in care acestea apar in lista. Vom avea o variabila pointer p care va
+indica pe rind fiecare element al listei:
+
+p = cap;                              ³      
+while (p!=0){                         ³   for(p=cap; p!=0; p=p->link){
+            ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   ³         ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿   
+            ³ Prelucreaza p->data ³   ³         ³ Prelucreaza p->data ³
+            ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ   ³         ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+            p = p->link;              ³         }
+            }                         ³       
+
+      Un caz special apare atunci cind dorim sa facem o parcurgere care sa se
+opreasca in fata unui element care sa indeplineasca o conditie (ca in cazul 
+cind inseram un element intr-o pozitie data printr-o conditie, sau stergem un
+elemen care indeplineste o conditie). 
+      Presupunem ca lista are cel putin un element.
+      
+      p = cap;
+      while (p->link!=0 && !conditie(p->link)) 
+                         p = p->link;
+
+Bucla while se poate opri pe condifia "p->link==0", ceea ce insemna ca nici
+un element din lista nu indeplineste conditia iar poinertul p indica ultimul 
+element din lista,  sau pe conditia "conditie(p->link)" , ceea ce insemna ca
+pointerul p va contine adresa elementului din fata primului element care
+indeplineste conditia. 
+
+ÉÍÍÍÍÍÍ»
+º Tema º Se citeste de la intrare un sir de numere intregi, pe o linie, sir
+ÈÍÍÍÍÍÍ¼ incheiat cu o valoare zero.
+
+a) Sa se plaseze numerele citite intr-o lista inlantuita, prin inserari 
+repetate in fata listei.
+b) Sa se afiseze lista creata.
+c) Se citeste un numar si sa se determine daca acesta se afla printre 
+elementele listei creat.
+d) Sa se insereze un numar citit de la intrare intr-o pozitie citita 
+de la intrare.
+e) Se se stearga un element din lista dintr-o pozitie citita de la intrare.
+
+Tema
+ßßßßß
+      Sa se construiasca modul (fisierle .H si .CPP) care sa contina tipurile 
+de date si operatiile care implementeaza sub forma unei liste inlantuite o 
+agenda de numere de telefon. Elementele listei vor contine ca informatie 
+utila doua cimpuri:
+      -nume - numele persoanei;
+      -tel  - numarul de telefon;
+Elementele listei vor fi pastrate in ordine alfabetica dupa numele persoanei. 
+Sa se definiesca procedurile care:
+      - insereaza un element in lista;
+      - sterge din lista o persoana data;
+      - cauta in lista numarul de telefon al unei persoane date;
+      - afiseaza lista in intregime.
+
+      Sa se construiasca un program care cu ajutorului unui meniu simplu sa
+permita selectarea operatiilor definite mai sus.
+
